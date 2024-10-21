@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Table
+// Type: String, Int, Float, Boolean
+// fieldName fieldType fieldAttribute(optional)
+// fieldType 뒤에 ?를 붙이면 optional field(Nullable)이 된다. Nullable <-> Non-nullable(required field)
+// @id: Primary Key(PK)로 사용하는 필드
+// @unique: 중복을 허용하지 않는 필드
+// @default: 필드의 기본값 설정.
+// autoincrement() : classic한 숫자형 id 생성, uuid(): 36자 문자형 id 생성
+// id, createAt, updateAt은 보통 모든 Table에 존재한다.
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  firstName String
+  lastName  String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // updateAt attribute가 존재한다.
+
+  // @@unique([firstName, lastName]) // 여러 필드의 조합 결과가 유니크해야할 경우 이와 같이 선언한다.
+  // 1대 다 관계에서 '1'측에선 '다'측 배열을 정의한다. 실제 db에는 저장되지 않는다.
+  orders         Order[]
+  userPreference UserPreference?
+  savedProducts  Product[]
+}
+
+// enum도 fieldType에 사용 가능하다.
+// enum EnumType {
+//   OPTION1
+//   OPTION2
+// }
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    Category
+  price       Float
+  stock       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+  savedUsers User[]
+}
+
+model UserPreference {
+  id           String   @id @default(uuid())
+  receiveEmail Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  // 1대 다 관계에선 '다'측에 FK와 관계를 정의한다. 실제로 저장되는건 FK뿐이다.
+  // 관계를 정의할 때 타 모델의 타입까지만 선언한 뒤 format해주면 자동으로 삽입된다. 이 경우엔 user User까지만 선언하고 format해주면 된다.
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId     String?
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  unitPrice Float
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  orderId   String
+  productId String?
+}
+
+enum Category {
+  FASHION
+  BEAUTY
+  SPORTS
+  ELECTRONICS
+  HOME_INTERIOR
+  HOUSEHOLD_SUPPLIES
+  KITCHENWARE
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETE
+}
