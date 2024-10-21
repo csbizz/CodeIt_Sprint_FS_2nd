@@ -1,13 +1,14 @@
+import Head from 'next/head';
 import Dropdown from '@/components/Dropdown';
+import { useTheme } from '@/lib/ThemeContext';
 import styles from '@/styles/Setting.module.css';
-import { useTheme } from '@/lib/ThemeContext.js';
-import Head from 'next/head.js';
 
 export default function Setting() {
   const { theme, setTheme } = useTheme();
 
   function handleDropdownChange(name, value) {
-    setTheme(value);
+    const nextTheme = value;
+    setTheme(nextTheme);
   }
 
   return (
