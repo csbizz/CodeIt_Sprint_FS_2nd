@@ -1,0 +1,21 @@
+{
+  // JSON은 주석을 허용하지 않음. 사용시엔 주석을 제거할 것.
+  // FRONTEND
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "module": "ESNext",
+    "target": "ESNext",
+    "allowJs": true,
+    "jsx": "preserve" // React 프로젝트인 경우
+  },
+
+  // BACKEND
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "allowJs": true
+  }
+}
