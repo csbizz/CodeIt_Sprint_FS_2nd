@@ -1,0 +1,21 @@
+{
+  "name": "ts-lecture",
+  "version": "1.0.0",
+  "description": "자바스크립트 vs 타입스크립트",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/main.ts",
+    "build:tsc": "tsc",
+    "build:swc": "tsc --noEmit src/*.ts && npx swc src -d dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/cli": "^0.4.1-nightly.20240914",
+    "@swc/core": "^1.7.40",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

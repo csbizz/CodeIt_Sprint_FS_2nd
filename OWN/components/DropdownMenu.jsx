@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import c from '@/src/utils/constants';
 import { useEffect, useRef } from 'react';
-import { useDropdown } from '../contexts/DropdownContext';
+import { useDropdown } from '../contexts/DropdownProvider';
 
 const style = {
   dropdownMenu: css`
@@ -53,13 +53,13 @@ const style = {
   `,
 };
 
-export default function DropdownMenu({ DropdownButton, list, dictionary }) {
+export default function DropdownMenu({ DropdownButton, list, dictionary, onClick }) {
   const dropdownRef = useRef();
-  const { dropdownOpen, setDropdownOpen, setItem: setSortOrder } = useDropdown();
+  const { dropdownOpen, setDropdownOpen } = useDropdown();
 
   const handleClick = item => {
     setDropdownOpen(false);
-    setSortOrder(item);
+    onClick(item);
   };
 
   useEffect(() => {
