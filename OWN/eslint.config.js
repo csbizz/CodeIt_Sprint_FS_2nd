@@ -1,12 +1,12 @@
-import globals from 'globals';
+import babelParser from '@babel/eslint-parser';
 import pluginJs from '@eslint/js';
-import pluginReact from 'eslint-plugin-react';
+import prettierConfig from 'eslint-config-prettier';
 import pluginImport from 'eslint-plugin-import';
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
-import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginPrettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
-import babelParser from '@babel/eslint-parser';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
 export default [
   { files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'] },
@@ -24,15 +24,6 @@ export default [
     },
   },
   {
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-  },
-  pluginJs.configs.recommended,
-  prettierConfig,
-  {
     plugins: {
       prettier: pluginPrettier,
       'jsx-a11y': pluginJsxA11y,
@@ -42,6 +33,32 @@ export default [
     },
   },
   {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      'import/resolver': {
+        node: true,
+        alias: {
+          map: [
+            ['@pages', './pages'],
+            ['@components', './src/components'],
+            ['@contexts', './src/contexts'],
+            ['@hooks', './src/hooks'],
+            ['@layouts', './src/layouts'],
+            ['@utils', './src/utils'],
+            ['@styles', './src/styles'],
+            ['@', './'],
+          ],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
+      },
+      'import/internal-regex': '@/',
+    },
+  },
+  pluginJs.configs.recommended,
+  prettierConfig,
+  {
     rules: {
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
       'no-restricted-globals': 'off',
@@ -49,7 +66,6 @@ export default [
       'no-unused-vars': 'off',
       'react/react-in-jsx-scope': 'off', // Next.js에서는 필요 없음
       'react/jsx-uses-react': 'off', // React 17+에서는 필요 없음
-      'import/extensions': 'off',
       'no-bitwise': 'off',
       'react/prop-types': 'off',
       'consistent-return': 'off',
@@ -60,6 +76,80 @@ export default [
       'guard-for-in': 'off',
       'no-underscore-dangle': 'off',
       camelcase: 'off',
+      // NOTE JS/TS 관련 확장자만 생략한다.
+      'import/extensions': ['error', { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', css: 'always' }],
+      'import/no-duplicates': ['warn', { 'prefer-inline': true, considerQueryString: true }],
+      'import/order': [
+        'warn',
+        {
+          groups: ['builtin', 'external', 'internal'],
+          'newlines-between': 'never',
+          distinctGroup: false,
+          pathGroups: [
+            {
+              pattern: '@emotion/**',
+              group: 'external',
+              position: 'before',
+            },
+            {
+              pattern: 'next/**',
+              group: 'external',
+              position: 'before',
+            },
+            {
+              pattern: 'react',
+              group: 'external',
+              position: 'before',
+            },
+            {
+              pattern: 'axios',
+              group: 'external',
+              position: 'before',
+            },
+            {
+              pattern: '@/pages/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/components/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/contexts/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/hooks/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/layouts/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/utils/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@/styles/**',
+              group: 'internal',
+              position: 'before',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          warnOnUnassignedImports: true,
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: false,
+          },
+        },
+      ],
     },
   },
 ];

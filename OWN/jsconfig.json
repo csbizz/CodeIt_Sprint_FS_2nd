@@ -3,7 +3,14 @@
   "compilerOptions": {
     // NOTE 루트폴더를 @로 지정
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@pages/*": ["./pages/*"],
+      "@components/*": ["./src/components/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@styles/*": ["./src/styles/*"]
     },
     // NOTE ESNext: ECMAScript의 최신 버전을 지정
     "target": "ESNext",
