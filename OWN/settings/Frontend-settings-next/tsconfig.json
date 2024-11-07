@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "allowJs": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+    // strict 관련 설정들을 개별적으로 false로 설정
+    "strict": false,
+    "noImplicitAny": false, // 암시적 any 타입 허용
+    "strictNullChecks": false, // null과 undefined 체크 완화
+    "strictFunctionTypes": false, // 함수 타입 체크 완화
+    "strictBindCallApply": false, // bind, call, apply 메서드 체크 완화
+    "strictPropertyInitialization": false, // 클래스 프로퍼티 초기화 체크 완화
+    "noImplicitThis": false, // this 타입 체크 완화
+    "alwaysStrict": false, // strict mode 선언 필요없음
+    "noEmit": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "incremental": true,
+    "lib": ["dom", "dom.iterable", "esnext"]
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+  "exclude": ["node_modules", "dist", "eslint.config.js", "prettier.config.mjs"]
+}

@@ -1,29 +1,21 @@
-// import { Html, Head, Main, NextScript } from 'next/document';
-
-// export default function Document() {
-//   return (
-//     <Html lang="ko">
-//       <Head />
-//       <body>
-//         <Main />
-//         <NextScript />
-//       </body>
-//     </Html>
-//   );
-// }
-
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
-import createEmotionServer from '@emotion/server/create-instance';
 import createCache from '@emotion/cache';
+import createEmotionServer from '@emotion/server/create-instance';
+import type { DocumentContext, DocumentInitialProps } from 'next/document';
+import NextDocument, { Head, Html, Main, NextScript } from 'next/document';
+import React from 'react';
 
-export async function getInitialProps(ctx) {
+interface DocumentProps extends DocumentInitialProps {
+  emotionStyleTags: JSX.Element[];
+}
+
+export async function getInitialProps(ctx: DocumentContext) {
   const originalRenderPage = ctx.renderPage;
   const cache = createCache({ key: 'css' });
   const { extractCriticalToChunks } = createEmotionServer(cache);
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: App => props => <App emotionCache={cache} {...props} />,
+      enhanceApp: (App: any) => (props: any) => <App emotionCache={cache} {...props} />,
     });
 
   const initialProps = await NextDocument.getInitialProps(ctx);
@@ -38,7 +30,7 @@ export async function getInitialProps(ctx) {
   };
 }
 
-export default function Document({ emotionStyleTags }) {
+export default function Document({ emotionStyleTags }: DocumentProps) {
   return (
     <Html lang="ko">
       <Head>{emotionStyleTags}</Head>
