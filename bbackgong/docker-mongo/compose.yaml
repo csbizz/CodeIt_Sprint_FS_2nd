@@ -1,0 +1,17 @@
+services:
+  my_mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: csbizz
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - "27017:27017"
+  your_mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: csbizz
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - "27018:27017"

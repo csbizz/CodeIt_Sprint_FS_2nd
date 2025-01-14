@@ -1,0 +1,9 @@
+POST http://localhost:3000/photos
+Content-Type: multipart/form-data; boundary=Boundary01234567890123456789
+
+--Boundary01234567890123456789
+Content-Disposition: form-data; name="image"; filename="profile.txt"
+Content-Type: text/plain
+
+This is profile image.
+--Boundary01234567890123456789--

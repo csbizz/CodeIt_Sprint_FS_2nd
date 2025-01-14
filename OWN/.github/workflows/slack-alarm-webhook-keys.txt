@@ -1,0 +1,12 @@
+GH_TOKEN: all:repo 권한 필요
+SLACK_WEBHOOK_URL: https://api.slack.com/apps
+  Create New App
+  From scratch
+  Name: 알람 이름
+  workspace: 현재 사용하는 슬랙 워크스페이스
+  만들어진 뒤
+  Incoming Webhooks
+  Add New Webhook to Workspace
+  채널 설정
+  이후 주어진 Webhook URL 복사
+  해당 이름으로 Repository Secrets에 등록

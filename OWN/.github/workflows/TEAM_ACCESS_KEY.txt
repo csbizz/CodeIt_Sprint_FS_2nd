@@ -1,0 +1,1 @@
+all:repo와 read:org 권한을 가진 PAT가 필요함

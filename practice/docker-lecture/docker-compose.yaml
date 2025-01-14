@@ -1,0 +1,36 @@
+services:
+  server:
+    container_name: server
+    build:
+      context: ./
+      dockerfile: ./docker/server.dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://wow:hello@db:5432/my
+    restart: always
+    volumes:
+      - ./logs:/app/logs
+  #    depends_on:
+  #      - db
+  #  db:
+  #    container_name: postgresql
+  #    image: postgres:17
+  #    restart: always
+  #    environment:
+  #      POSTGRES_USER: wow
+  #      POSTGRES_PASSWORD: hello
+  #      POSTGRES_DB: my
+  #    ports:
+  #      - "5432:5432"
+  client:
+    container_name: client
+    build:
+      context: ./
+      dockerfile: ./docker/client.dockerfile
+    ports:
+      - "80:3000"
+    environment:
+      NODE_ENV: production
+

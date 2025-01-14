@@ -1,7 +1,7 @@
-name: Assign Random Reviewers
+name: Assign Random Reviewers (Repository)
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened] # Only trigger on PR creation
 
 permissions:
   pull-requests: write
@@ -60,3 +60,13 @@ jobs:
             -H "Authorization: token ${{ secrets.TEAM_ACCESS_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d '${{ steps.get-members.outputs.json_string }}'
+
+      - name: Assign PR author as assignee
+        if: success()
+        run: |
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          curl -X POST \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/assignees" \
+            -H "Authorization: token ${{ secrets.TEAM_ACCESS_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"assignees\":[\"$PR_AUTHOR\"]}"

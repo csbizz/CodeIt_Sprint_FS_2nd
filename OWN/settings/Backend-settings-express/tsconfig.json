@@ -1,28 +1,30 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./*"],
-      "@configs/*": ["./src/configs/*"],
-      "@controllers/*": ["./src/controllers/*"],
-      "@models/*": ["./src/models/*"],
-      "@services/*": ["./src/services/*"],
-      "@utils/*": ["./src/utils/*"]
-    },
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "esModuleInterop": true,
-    "allowJs": true,
-    "isolatedModules": true,
-    "allowImportingTsExtensions": false,
-    "verbatimModuleSyntax": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "declaration": true,
     "removeComments": true,
-    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "#global/*": ["./src/global/*"],
+      "#product/*": ["./src/product/*"],
+      "#prisma/*": ["./prisma/*"],
+      "@/*": ["./*"]
+    }
   },
-  "include": ["**/*.ts", "**/*.js", "prettier.config.mjs"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "prettier.config.mjs", "eslint.config.js"]
 }

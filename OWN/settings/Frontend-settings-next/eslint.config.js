@@ -76,6 +76,7 @@ export default [
       'guard-for-in': 'off',
       'no-underscore-dangle': 'off',
       camelcase: 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
       // NOTE JS/TS 관련 확장자만 생략한다.
       'import/extensions': ['error', { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', css: 'always' }],
       'import/no-duplicates': ['warn', { 'prefer-inline': true, considerQueryString: true }],
@@ -88,6 +89,11 @@ export default [
           pathGroups: [
             {
               pattern: '@emotion/**',
+              group: 'external',
+              position: 'before',
+            },
+            {
+              pattern: '@tanstack/**',
               group: 'external',
               position: 'before',
             },
@@ -107,39 +113,49 @@ export default [
               position: 'before',
             },
             {
-              pattern: '@/pages/**',
+              pattern: '@pages/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@/components/**',
+              pattern: '@components/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@/contexts/**',
+              pattern: '@contexts/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@/hooks/**',
+              pattern: '@hooks/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@/layouts/**',
+              pattern: '@layouts/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@/utils/**',
+              pattern: '@utils/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@/styles/**',
+              pattern: '@styles/**',
               group: 'internal',
-              position: 'before',
+              position: 'after',
+            },
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'after',
+            },
+            {
+              pattern: './**',
+              group: 'internal',
+              position: 'after',
             },
           ],
           pathGroupsExcludedImportTypes: ['builtin'],

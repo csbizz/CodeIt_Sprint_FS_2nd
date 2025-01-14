@@ -1,7 +1,7 @@
-name: Assign Random Reviewers
+name: Assign Random Reviewers (Organization)
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened] # Only trigger on PR creation
 
 permissions:
   pull-requests: write
@@ -14,14 +14,14 @@ jobs:
       - name: Get team members
         id: get-members
         run: |
-          # Get organization and team name from repository
-          ORG_NAME="2-Docthru-team1"
+          # Get organization name from repository
+          ORG_NAME="${{ vars.ORGANIZATION_NAME }}"
 
-          # Get team members directly from repository collaborators as fallback
+          # Get team members directly from repository collaborators
           members=$(curl -s \
             -H "Authorization: token ${{ secrets.TEAM_ACCESS_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/collaborators" | jq -r '.[].login')
+            "https://api.github.com/orgs/$ORG_NAME/members" | jq -r '.[].login')
 
           echo "All members: $members"
 
@@ -47,8 +47,8 @@ jobs:
           selected_reviewers=($(printf "%s\n" "${filtered_members[@]}" | shuf -n 2))
 
           # Create JSON array string with proper escaping
-          json_array=$(jq -n --arg reviewers "$(printf '%s\n' "${selected_reviewers[@]}")" \
-            '$reviewers | split("\n") | {reviewers: .}' )
+          json_array=$(jq -n --arg r1 "${selected_reviewers[0]}" --arg r2 "${selected_reviewers[1]}" \
+            '{reviewers: [$r1, $r2]}')
 
           echo "Selected reviewers: ${selected_reviewers[*]}"
           echo "json_string<<EOF" >> $GITHUB_OUTPUT
@@ -63,3 +63,13 @@ jobs:
             -H "Authorization: token ${{ secrets.TEAM_ACCESS_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             -d '${{ steps.get-members.outputs.json_string }}'
+
+      - name: Assign PR author as assignee
+        if: success()
+        run: |
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          curl -X POST \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/assignees" \
+            -H "Authorization: token ${{ secrets.TEAM_ACCESS_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"assignees\":[\"$PR_AUTHOR\"]}"
